@@ -5,7 +5,7 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     public float damage = 10f;
-    public float range = 100f;
+    public float range = 5.0f;
     public float fireRate = .25f;
     public float hitForce = 100f; // amount of force that hits an object with rigidbody
     public Transform gunEnd; // empty gameobject that marks the position at the end of the gun where bullet begins
@@ -32,14 +32,15 @@ public class GunController : MonoBehaviour
             laserLine.SetPosition(0, gunEnd.position);
             Vector3 rayOrigin = playerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
-            if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, range))
+            if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, this.range))
             {
                 laserLine.SetPosition(1, hit.point);
                 Destroy(hit.transform.gameObject); // destroys gameobject, will update later to decrease enemy health
             }
             else
             {
-                laserLine.SetPosition(1, rayOrigin+(playerCamera.transform.forward * range));
+                laserLine.SetPosition(1, rayOrigin+(playerCamera.transform.forward * this.range));
+                //laserLine.SetPosition(1, rayOrigin*range);
             }
             StartCoroutine(ShootGun());
         }

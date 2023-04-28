@@ -35,7 +35,7 @@ public class GunController : MonoBehaviour
             if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, this.range))
             {
                 laserLine.SetPosition(1, hit.point);
-                Destroy(hit.transform.gameObject); // destroys gameobject, will update later to decrease enemy health
+                //Destroy(hit.transform.gameObject); // destroys gameobject, will update later to decrease enemy health
             }
             else
             {

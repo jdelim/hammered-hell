@@ -63,7 +63,7 @@ public class ShotgunController : MonoBehaviour
 
                 if (Physics.Raycast(rayOrigin, direction, out hit, range))
                 {
-                    Destroy(hit.transform.gameObject);
+                    //Destroy(hit.transform.gameObject);
                 }
             }
 

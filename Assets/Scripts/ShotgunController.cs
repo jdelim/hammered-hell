@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ShotgunController : MonoBehaviour
 {
     public float damage = 10f;
@@ -17,6 +13,8 @@ public class ShotgunController : MonoBehaviour
 
     private LineRenderer[] laserLines = new LineRenderer[9]; // an array of line renderers to draw the raycasts
     private float nextFire; // hold the time in which the player will be allowed to fire again after firing
+
+    public Health enemyHealth;
 
     public Camera playerCamera;
 
@@ -63,7 +61,11 @@ public class ShotgunController : MonoBehaviour
 
                 if (Physics.Raycast(rayOrigin, direction, out hit, range))
                 {
-                    //Destroy(hit.transform.gameObject);
+                    enemyHealth = hit.transform.GetComponent<Health>();
+                    if (enemyHealth != null)
+                    {
+                        enemyHealth.amount -= damage;
+                    }
                 }
             }
 

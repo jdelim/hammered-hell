@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GunController : MonoBehaviour
 {
@@ -16,11 +17,12 @@ public class GunController : MonoBehaviour
     private float nextFire; // hold the time in which the player will be allowed to fire again after firing
 
     public Camera playerCamera;
+    
+    public Health enemyHealth;
 
     void Awake() 
     {
         laserLine = GetComponent<LineRenderer>();
-        //playerCamera = GetComponentInParent<Camera>(); 
     }
 
     void Update()
@@ -32,16 +34,19 @@ public class GunController : MonoBehaviour
             laserLine.SetPosition(0, gunEnd.position);
             Vector3 rayOrigin = playerCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
+            // if raycast hits an enemy
             if (Physics.Raycast(rayOrigin, playerCamera.transform.forward, out hit, this.range))
             {
                 laserLine.SetPosition(1, hit.point);
-                //Destroy(hit.transform.gameObject); // destroys gameobject, will update later to decrease enemy health
+                enemyHealth = hit.transform.GetComponent<Health>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.amount -= damage;
+                }
             }
             else
             {
-                laserLine.SetPosition(1, rayOrigin+(playerCamera.transform.forward * this.range));
-                //laserLine.SetPosition(1, rayOrigin*range);
-            }
+                laserLine.SetPosition(1, rayOrigin+(playerCamera.transform.forward * this.range));            }
             StartCoroutine(ShootGun());
         }
     }
@@ -53,19 +58,3 @@ public class GunController : MonoBehaviour
         laserLine.enabled = false;
     }
 }
-// if (Input.GetButtonDown("Fire1"))
-        // {
-        //     RaycastHit hit;
-        //     if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
-        //     {
-        //         Health enemyHealth = hit.transform.GetComponent<Health>();
-        //         if (enemyHealth != null)
-        //         {
-        //             enemyHealth.amount -= damage;
-        //             if (enemyHealth.amount <= 0f)
-        //             {
-        //                 enemyHealth.onDeath.Invoke();
-        //             }
-        //         }
-        //     }
-        // }
